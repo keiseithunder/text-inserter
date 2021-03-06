@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Inserter</title>
+</head>
+
+<body style="text-align: center;" onload="loadFormat()">
+  <h4>Format (example "Hello ?????")</h4>
+  <textarea name="" id="text-format" cols="80" rows="3"></textarea>
+  <br>
+  <button onclick="saveFormat()">Save Format</button>
+  <br>
+  <h4>Text to insert (example "a, b" seperate by comma)</h4>
+  <textarea name="" id="text-to-insert" cols="80" rows="15"></textarea>
+  <div id="output">
+    <textarea name="" id="outP" cols="80" rows="15"></textarea>
+  </div>
+  <button onclick="saveToClipboard()">Copy text</button>
+
+</body>
+<script>
+  const placeholder = "?????"
+  const seperator = ','
+  const format = document.getElementById('text-format')
+  const insertText = document.getElementById('text-to-insert')
+  const outputArea = document.getElementById('outP')
+  console.log('sth')
+  insertText.addEventListener('change', e => {
+    console.log('sth')
+    let formatText = format.value.split(placeholder)
+    let textToInsert = insertText.value.split(seperator)
+    const text = formatText.reduce((acc, cur, i) => {
+      acc = acc + cur + (textToInsert[i] || "")
+      return acc
+    }, "")
+    console.log(text)
+    outputArea.value = text
+  })
+
+  function saveToClipboard() {
+    outputArea.select();
+    outputArea.setSelectionRange(0, 99999)
+    document.execCommand("copy");
+  }
+
+  function saveFormat() {
+    window.localStorage.setItem('format', format.value)
+  }
+
+  function loadFormat() {
+    format.value = window.localStorage.getItem('format')
+  }
+</script>
+
+</html>
